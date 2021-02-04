@@ -1,6 +1,6 @@
 from databaseManager import DatabaseManager as dm, GenereateQuery as query
 import sys
-import secretPassword 
+import password 
 
 class Menu:
     def __init__(self):
