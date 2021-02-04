@@ -31,7 +31,7 @@ class DatabaseManager:
             
     
     # Executes query - mode 1: insert/delete/update  | mode 2: select
-    def execute_query(self, query: str, mode: int) -> List:
+    def execute_query(self, query: str, mode: int =1) -> List:
         self.cursor = self.mydb.cursor()
         self.cursor.execute(query)
         # If user wants to insert/ delete into database:
@@ -66,5 +66,3 @@ class GenereateQuery:
     def update_account(self, accountId: int, newPassword: str) -> str:
         query = "UPDATE accounts.acc SET password = '%s' WHERE account_id = %s" % (accountId, newPassword)
         return query
-
-DatabaseManager()   
