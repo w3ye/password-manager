@@ -20,16 +20,16 @@ class Credentials:
     def get_cred(self) -> Dict:
         data = self.read_file()
         cred = {}
-        noSpaceReg = re.compile(r'\s*')     # Remove all spaces
-        hostReg = re.compile(r'host | host. | endpoint')
         for i in data:
-            noSpace = noSpaceReg.sub('',i.lower())
-            temp = noSpace.split('=')
-            if temp[0] == 'host' or temp[0] == 'endpoint' or temp[0] == 'hostname':
+            noSpace = re.compile(r'\s*').sub('',i.lower())  # Removing space in 'i'
+            temp = noSpace.split('=')   # Split 'noSpace' by delimiter('=')
+            
+            # Setting synonyms  nouns to a specific one using regex
+            if re.compile(r'host|host.|endpoint', re.VERBOSE).search(temp[0]) != None:
                 temp[0] = 'host'
-            if temp[0] == 'username' or temp[0] == 'user':
+            if re.compile(r'user.').search(temp[0]) != None:
                 temp[0] = 'user'
-            if temp[0] == 'password' or temp[0] == 'pass':
+            if re.compile(r'password | pass', re.VERBOSE).search(temp[0]) != None:
                 temp[0] = 'password'
             cred[temp[0]] = temp[1]         # Store the data read from the textfile into dictionary 'cred'
 
@@ -38,11 +38,10 @@ class Credentials:
         if ('host' in cred.keys()) and     \
         ('user' in cred.keys()) and        \
         ('password' in cred.keys()):
-            print(cred)
             return cred
         # If not display a warning 
         else:
             raise Warning("Credential infomation missing")
             return None
     
-Credentials().get_cred()
+#Credentials().get_cred()
