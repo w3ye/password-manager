@@ -21,10 +21,11 @@ class Credentials:
         data = self.read_file()
         cred = {}
         noSpaceReg = re.compile(r'\s*')     # Remove all spaces
+        hostReg = re.compile(r'host | host. | endpoint')
         for i in data:
             noSpace = noSpaceReg.sub('',i.lower())
             temp = noSpace.split('=')
-            if temp[0] == 'host' or temp[0] == 'endpoint':
+            if temp[0] == 'host' or temp[0] == 'endpoint' or temp[0] == 'hostname':
                 temp[0] = 'host'
             if temp[0] == 'username' or temp[0] == 'user':
                 temp[0] = 'user'

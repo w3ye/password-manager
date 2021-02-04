@@ -11,18 +11,23 @@ class DatabaseManager:
 
 
     def connect(self, cred):
-        host = cred['host']
-        user = cred['user']
-        password = cred['password']
-        self.mydb = mysql.connector.connect(
-            host=host, 
-            user=user, 
-            password=password
-        )
-        # Checking if the database is connected
-        if self.mydb.is_connected():
-            print("Connected")
-        else: print("Failed to connect")
+        try:
+            host = cred['host']
+            user = cred['user']
+            password = cred['password']
+            self.mydb = mysql.connector.connect(
+                host=host, 
+                user=user, 
+                password=password
+            )
+            # Checking if the database is connected
+            if self.mydb.is_connected():
+                print("Connected")
+        except mysql.connector.errors.InterfaceError as e:
+            print(e, '\nPlease make sure the host name is correct: ', cred['host'])
+        except mysql.connector.errors.ProgrammingError as e:
+            print(e) 
+            
     
     # Executes query - mode 1: insert/delete/update  | mode 2: select
     def execute_query(self, query: str, mode: int) -> List:
