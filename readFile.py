@@ -22,15 +22,15 @@ class Credentials:
         cred = {}
         # Setting key and value for Dict
         for i in data:
-            noSpace = re.compile(r'\s*').sub('',i.lower())  # Removing space in 'i'
+            noSpace = re.compile(r'\s*').sub('',i)  # Removing space in 'i'
             temp = noSpace.split('=')   # Split 'noSpace' by delimiter('=')
             
             # Setting synonyms  nouns to a specific one using regex
-            if re.compile(r'host|host.|endpoint', re.VERBOSE).search(temp[0]) != None:
+            if re.compile(r'host | host. | endpoint', re.VERBOSE | re.IGNORECASE).search(temp[0]) != None:
                 temp[0] = 'host'
-            if re.compile(r'user.').search(temp[0]) != None:
+            if re.compile(r'user.', re.IGNORECASE).search(temp[0]) != None:
                 temp[0] = 'user'
-            if re.compile(r'password | pass', re.VERBOSE).search(temp[0]) != None:
+            if re.compile(r'password | pass', re.VERBOSE | re.IGNORECASE).search(temp[0]) != None:
                 temp[0] = 'password'
             cred[temp[0]] = temp[1]         # Store the data read from the textfile into dictionary 'cred'
 

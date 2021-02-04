@@ -23,10 +23,11 @@ class DatabaseManager:
             # Checking if the database is connected
             if self.mydb.is_connected():
                 print("Connected")
+        # Catching sql.connector Errors
         except mysql.connector.errors.InterfaceError as e:
             print(e, '\nPlease make sure the host name is correct: ', cred['host'])
         except mysql.connector.errors.ProgrammingError as e:
-            print(e) 
+            print(e, '\nPlease make sure the username and password is correct') 
             
     
     # Executes query - mode 1: insert/delete/update  | mode 2: select
