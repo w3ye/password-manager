@@ -20,6 +20,7 @@ class Credentials:
     def get_cred(self) -> Dict:
         data = self.read_file()
         cred = {}
+        # Setting key and value for Dict
         for i in data:
             noSpace = re.compile(r'\s*').sub('',i.lower())  # Removing space in 'i'
             temp = noSpace.split('=')   # Split 'noSpace' by delimiter('=')
@@ -43,5 +44,3 @@ class Credentials:
         else:
             raise Warning("Credential infomation missing")
             return None
-    
-#Credentials().get_cred()
