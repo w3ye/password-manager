@@ -52,6 +52,7 @@ class DatabaseManager:
         Execute mysql query.\n
         mode 1: INSERT/DELETE/UPDATE (commit queries)\n
         mode 2: SELECT (view queries)
+        mode 0: CREATE TABLE
         """
         self.cursor = self.mydb.cursor()
         self.cursor.execute(query)
@@ -64,4 +65,4 @@ class DatabaseManager:
             return result
         return None
 
-DatabaseManager()
+# DatabaseManager()
