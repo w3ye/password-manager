@@ -5,10 +5,21 @@ import pyinputplus as pyip
 import sys,re
 import password 
 import pprint
+from config import Config
 
 class Menu:
     def __init__(self):
+        user = Config().local_user_config()
+        inputPassword = pyip.inputPassword("Hi, " + user['user'] + ". Please enter your password\n")
+
+        while inputPassword != user['password']:
+            inputPassword = pyip.inputPassword("Password incorrect, please retry(press q to quit): \n")
+            if inputPassword == 'q':
+                sys.exit()
+        
         self.main_menu()
+        
+
 
     def main_menu(self):
         print('=' * 20 + ' MENU ' + '='*20)
