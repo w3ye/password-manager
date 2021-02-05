@@ -1,8 +1,16 @@
+#! python3 
+# password.py - Creates a password
 import string
 import secrets
 import random
 
 def generate_password(mode=1) -> str:
+    """
+    Generate password\n
+    mode 1: Generate alphanumeric + symbol password\n
+    mode 2: Generate only an alphanumeric password\n
+    Default mode set to 1
+    """
     alphabet_symbols = string.ascii_letters + string.digits + string.punctuation
     alpha_numeric = string.ascii_letters + string.digits
     # generate a random password length 8 - 16

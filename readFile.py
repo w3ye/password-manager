@@ -5,8 +5,10 @@ from typing import List, Dict
 import re
 class Credentials:
 
-    # Get sql credentials from text file
     def read_file(self) -> List:
+        """
+        Read mysql credential from a textfile in current working directory
+        """
         data = None
         try:
             with open('sqlCred.txt') as file:
@@ -16,8 +18,10 @@ class Credentials:
             print("OS error: {0}".format(err))
         return data
 
-    # Process the data from 'read_file()'
     def get_cred(self) -> Dict:
+        """
+        Process the infomation from 'read_file' to generate a dictionary of mysql credentials for easy access.
+        """
         data = self.read_file()
         cred = {}
         # Setting key and value for Dict

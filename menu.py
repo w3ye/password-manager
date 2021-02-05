@@ -1,3 +1,5 @@
+#! python3
+# menu.py - A menu for the user 
 from databaseManager import DatabaseManager as dm
 import pyinputplus as pyip
 import sys,re
