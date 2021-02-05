@@ -29,15 +29,18 @@ class Credentials:
             noSpace = re.compile(r'\s*').sub('',i)  # Removing space in 'i'
             temp = noSpace.split('=')   # Split 'noSpace' by delimiter('=')
             
-            # Setting synonyms  nouns to a specific one using regex
+            # Setting synonyms nouns to a specific one using regex
+            # Store the data read from the textfile into dictionary 'cred'
             if re.compile(r'host | host. | endpoint', re.VERBOSE | re.IGNORECASE).search(temp[0]) != None:
                 temp[0] = 'host'
             if re.compile(r'user.', re.IGNORECASE).search(temp[0]) != None:
                 temp[0] = 'user'
             if re.compile(r'password | pass', re.VERBOSE | re.IGNORECASE).search(temp[0]) != None:
                 temp[0] = 'password'
-            cred[temp[0]] = temp[1]         # Store the data read from the textfile into dictionary 'cred'
-
+            cred[temp[0]] = temp[1]         
+            if re.compile(r'database',re.IGNORECASE).search(temp[0])!=None:
+                temp[0] = 'database'
+            
         # Makes sure that essential login credentials is not missing in the textfile
         # Check if host,user and password is in cred
         if ('host' in cred.keys()) and     \

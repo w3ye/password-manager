@@ -16,23 +16,31 @@ class DatabaseManager:
         """
         Establis a mysql database connections
         """
+        host = cred['host']
+        user = cred['user']
+        password = cred['password']
+        # Check if database is specified from the credential textfile
+        if 'database' in cred.keys():
+            database = cred['database']
+        else: 
+            database = ''
+
         try:
-            host = cred['host']
-            user = cred['user']
-            password = cred['password']
             self.mydb = mysql.connector.connect(
                 host=host, 
                 user=user, 
-                password=password
+                password=password,
+                database=database
             )
             # Checking if the database is connected
             if self.mydb.is_connected():
                 print("Connected")
+                
         # Catching sql.connector Errors
         except mysql.connector.errors.InterfaceError as e:
             print(e, '\nPlease make sure the host name is correct: ', cred['host'])
         except mysql.connector.errors.ProgrammingError as e:
-            print(e, '\nPlease make sure the username and password is correct') 
+            print(e, '\nPlease make sure the username, password, database in the credentials text file is correct\nText file default name: \'sqlCred.txt\'')
 
     # TODO: Check if a database exists. If not create one.
     # TODO: Create multiple databases for different users.
@@ -55,3 +63,5 @@ class DatabaseManager:
             result = self.cursor.fetchall()
             return result
         return None
+
+DatabaseManager()
