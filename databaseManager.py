@@ -23,7 +23,7 @@ class DatabaseManager:
         if 'database' in cred.keys():
             database = cred['database']
         else: 
-            database = ''
+            database = 'accounts'
 
         try:
             self.mydb = mysql.connector.connect(
