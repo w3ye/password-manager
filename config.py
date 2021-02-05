@@ -82,5 +82,3 @@ class Config:
         shelfFile['user'] = user
         shelfFile['password'] = pass1
         shelfFile.close()
-
-Config().local_user_config()
