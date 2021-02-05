@@ -1,4 +1,6 @@
-from typing import List
+#! python3 
+# databaseManger.py - Connects to mysql database and execute queries
+from typing import List, Dict
 import mysql.connector
 from readFile import Credentials as rc
 
@@ -10,7 +12,10 @@ class DatabaseManager:
         self.connect(rc().get_cred())
 
 
-    def connect(self, cred):
+    def connect(self, cred: Dict):
+        """
+        Establis a mysql database connections
+        """
         try:
             host = cred['host']
             user = cred['user']
@@ -34,7 +39,7 @@ class DatabaseManager:
     # TODO: Save database names in binary files (shelf)        
     
     # Executes query - mode 1: insert/delete/update  | mode 2: select
-    def execute_query(self, query: str, mode: int =1) -> List:
+    def execute_query(self, query: str, mode=1) -> List:
         """
         Execute mysql query.\n
         mode 1: INSERT/DELETE/UPDATE (commit queries)\n
