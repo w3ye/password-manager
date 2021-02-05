@@ -1,44 +1,39 @@
-from databaseManager import DatabaseManager as dm, GenereateQuery as query
-import sys
+from databaseManager import DatabaseManager as dm
+import pyinputplus as pyip
+import sys,re
 import password 
+import pprint
 
 class Menu:
     def __init__(self):
-        print("Enter the number of your choice")
-        print("(1) Add account")
-        print("(2) Find account")
-        print("(q) to quit")
-        choice = input()
-        if choice == 'q':
+        self.main_menu()
+
+    def main_menu(self):
+        print('=' * 20 + ' MENU ' + '='*20)
+        option = pyip.inputMenu([\
+            "Enter an account",\
+            "Find an account", \
+            "Generate a password",
+            "quit"], numbered=True, blank=True).lower()
+        if option == "enter an account":
+            self.account_menu()
+        if option == "quit":
             sys.exit()
-        if choice == '1':
-            self.add_account()
+    
+    def remove_spaces(self, opt):
+        opt = re.compile(r'/s*').sub('',opt)
+        return opt
+    
+    def account_menu(self):
+        print('=' * 20 + ' ACCOUNT ' + '='*20)
+        option = pyip.inputMenu([\
+            "Enter an existing account", \
+            "Creating a new account", \
+            "Main Menu"], numbered=True, blank=True).lower()
+        
+        if option == 'main menu':
+            self.main_menu()
 
-    def add_account(self):
-        print("Please enter your username")
-        username = input()
-        print("Do you want to genereate a password? y/n")
-        choice = input()
-        # if the user wants a generated password
-        # TODO if the user enters something else, let them enter it again
-        if choice.lower() == 'y':
-            print("Do you need symbols in your password? y/n")
-            choice = input()
-            # if the user need symbols in their password
-            if choice.lower() == 'y':
-                password = secretpassword.generate_password()
-            # if the user just wants an alphanumeric password
-            # TODO if the user enters something else, let them enter it again
-            else: password = secretpassword.generate_password(2)
-        else:
-            print("Enter your password")
-            password = input()
-        print("Please enter the url for the password")
-        url = input()
-        print("Do you want to add any notes to for this account? (Press enter if you don't want to add a note)")
-        note = input()
-        #TODO display all the account details, check if they need any changes
-        #TODO generate account_id not done
-        query = query().GenereateQuery().new_account(accountId,username,password,url,note)
 
+        
 Menu()
