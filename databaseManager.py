@@ -40,11 +40,7 @@ class DatabaseManager:
         except mysql.connector.errors.InterfaceError as e:
             print(e, '\nPlease make sure the host name is correct: ', cred['host'])
         except mysql.connector.errors.ProgrammingError as e:
-            print(e, '\nPlease make sure the username, password, database in the credentials text file is correct\nText file default name: \'sqlCred.txt\'')
-
-    # TODO: Check if a database exists. If not create one.
-    # TODO: Create multiple databases for different users.
-    # TODO: Save database names in binary files (shelf)        
+            print(e, '\nPlease make sure the username, password, database in the credentials text file is correct\nText file default name: \'sqlCred.txt\'')        
     
     # Executes query - mode 1: insert/delete/update  | mode 2: select
     def execute_query(self, query: str, mode=1) -> List:
