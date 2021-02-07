@@ -2,6 +2,7 @@
 # query.py - Generate sql queries
 class GenereateQuery:
     
+    # TODO: Read the user config file to get the table name
     def new_account(self, accountId: int, username: str, password: str,url: str,note: str) -> str:
         """
         Generate a queries to insert an array of account information to mysql
