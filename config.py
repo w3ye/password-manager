@@ -40,8 +40,6 @@ class Config:
         
         return user
 
-        
-
     def create_user_config(self) -> None:
         """
         Creates a user config file
