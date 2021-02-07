@@ -21,7 +21,6 @@ class Config:
             os.mkdir('./config')
 
     
-    # TODO: Create a local user config 
     def local_user_config(self) -> Dict:
         """
         Read the user config file
