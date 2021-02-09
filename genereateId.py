@@ -13,7 +13,7 @@ class GenerateId:
         accountId = ""
         for i in range(length):
             accountId += str(randint(0,9))
-        self.check_account_id(self.check_account_id())
+        self.check_account_id(int(accountId))
         return int(accountId)
 
     def check_account_id(self, accountId: int) -> None:
