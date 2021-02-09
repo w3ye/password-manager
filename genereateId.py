@@ -4,9 +4,6 @@ from random import randint
 from databaseManager import DatabaseManager as dm
 
 class GenerateId:
-    
-    def __init__(self):
-        print(self.generate_account_id())
 
     def generate_account_id(self) -> int:
         """
