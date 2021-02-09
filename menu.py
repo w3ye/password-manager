@@ -4,24 +4,22 @@ from databaseManager import DatabaseManager as dm
 from query import GenereateQuery
 from genereateId import GenerateId as gId
 import pyinputplus as pyip
-import sys,re
-import password 
-import pprint
+import sys,re, password, pprint, logging
 from config import Config
+
+logging.basicConfig(level=logging.CRITICAL, format=' %(funcName)s - %(levelname)s: %(message)s')
 
 class Menu:
 
     def __init__(self):
-        user = Config().local_user_config()
-        inputPassword = pyip.inputPassword("Hi, " + user['user'] + ". Please enter your password\n")
-
-        while inputPassword != user['password']:
-            inputPassword = pyip.inputPassword("Password incorrect, please retry(press q to quit): \n")
+        local = Config()
+        inputPassword = pyip.inputPassword("Hi, " + local.get_name() + ". Please enter your password\n")
+        while inputPassword != str(local.get_password()):
+            inputPassword = pyip.inputPassword("Password incorrect, please retry or press q to quit: \n")
             if inputPassword == 'q':
                 sys.exit()
-        
         global query
-        query = GenereateQuery(user['user'])
+        query = GenereateQuery(local.get_user())
 
         self.main_menu()
         
@@ -75,4 +73,4 @@ class Test:
         notes = re.compile(r'*\s*').sub('',notes)
         
 
-Test().add_account()
+Menu()
