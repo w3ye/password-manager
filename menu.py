@@ -27,12 +27,12 @@ class Menu:
 
 
     def main_menu(self):
-        print('=' * 20 + ' MENU ' + '='*20)
-        option = pyip.inputMenu([\
-            "Enter an account",\
+        menuArr = ["Enter an account",\
             "Find an account", \
             "Generate a password",
-            "QUIT"], numbered=True, blank=True).lower()
+            "QUIT"]
+        print('=' * 20 + ' MENU ' + '='*20)
+        option = pyip.inputMenu(menuArr, numbered=True, blank=True).lower()
         if option == "enter an account":
             self.account_menu()
         if option == "quit":
@@ -43,17 +43,19 @@ class Menu:
         return opt
     
     def account_menu(self):
-        print(query)
-        print('=' * 20 + ' ACCOUNT ' + '='*20)
-        option = pyip.inputMenu([\
-            "Enter an existing account", \
+        menuArr = ["Enter an existing account", \
             "Creating a new account", \
             "Main Menu", \
-            "QUIT"], numbered=True, blank=True).lower()
+            "QUIT"]
+        print(query)
+        print('=' * 20 + ' ACCOUNT ' + '='*20)
+        option = pyip.inputMenu(menuArr, numbered=True, blank=True).lower()
         
         if option == 'main menu':
             self.main_menu()
 
-
+    def add_account(self):
+        
+        pass
         
 Menu()
