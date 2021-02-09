@@ -11,8 +11,7 @@ class GenereateQuery:
         Generate a queries to insert an array of account information to mysql
         """
         # Check if note is empty
-        k = note.replace(' ','')
-        if len(k) != 0:
+        if len(note.replace(' ','')) != 0:
             query = "INSERT INTO %s (account_id, username, psword, app_name, note) VALUES (%s, '%s', '%s', '%s', '%s')" % (self.tableName, accountId, username, password, app_name, note)
         else: 
             query = "INSERT INTO %s (account_id, username, psword, app_name) VALUES (%s, '%s', '%s', '%s')" % (self.tableName, accountId, username, password, app_name)

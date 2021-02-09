@@ -4,10 +4,8 @@ from databaseManager import DatabaseManager as dm
 from query import GenereateQuery
 from genereateId import GenerateId as gId
 import pyinputplus as pyip
-import sys,re, password, pprint, logging
+import sys,re, password, pprint
 from config import Config
-
-logging.basicConfig(level=logging.CRITICAL, format=' %(funcName)s - %(levelname)s: %(message)s')
 
 class Menu:
 
@@ -22,7 +20,7 @@ class Menu:
         global query
         query = GenereateQuery(local.get_user())
 
-        self.main_menu()
+        #self.main_menu()
         
     def main_menu(self):
         """
@@ -46,17 +44,24 @@ class Menu:
             "Main Menu",
             "QUIT"]
         print('=' * 20 + ' ACCOUNT ' + '='*20)
-        option = pyip.inputMenu(menuArr, numbered=True, blank=True).lower()
+        option = pyip.inputMenu(menuArr, numbered=True, blank=True)
         
-        if option == "main menu":
+        if option == menuArr[-2]:
             self.main_menu()
         if option == menuArr[-1]:
             sys.exit()
 
-    def add_account(self):
+    def add_existing_account(self):
+        """
+        Adding an existing account
+        """
         accountId = gId().generate_account_id()
-        print(accountId)
-        pass
+        username = pyip.inputStr("Enter username:\n")
+        password = Config.validate_password()
+        appName = pyip.inputStr("Enter the App name or url:\n")
+        note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n")
+        
+        query.new_account(accountId, username, password, appName, note)
 
     def find_account(self):
         pass
@@ -68,10 +73,14 @@ class Test:
     def add_account(self):
         accountId = gId().generate_account_id()
         username = pyip.inputStr("Enter username")
-        password = pyip.inputStr("Enter the password")
-        appName = pyip.inputStr("Enter the App name")
-        notes = pyip.inputStr("Enter note(Enter to skip)")
-        notes = re.compile(r'*\s*').sub('',notes)
+        password = Config().validate_password()
+        appName = pyip.inputStr("Enter the App name or url")
+        notes = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip)")
+        print(accountId)
+        print(username)
+        print(password)
+        print(appName)
+        print(notes)
         
 
-Menu()
+Test().add_account()
