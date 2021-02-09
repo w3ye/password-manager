@@ -6,16 +6,16 @@ class GenereateQuery:
         self.tableName = tableName
 
     # TODO: Read the user config file to get the table name OR receive the table name from menu
-    def new_account(self, accountId: int, username: str, password: str,url: str,note: str) -> str:
+    def new_account(self, accountId: int, username: str, password: str,app_name: str,note: str) -> str:
         """
         Generate a queries to insert an array of account information to mysql
         """
         # Check if note is empty
         k = note.replace(' ','')
         if len(k) != 0:
-            query = "INSERT INTO %s (account_id, username, psword, url, note) VALUES (%s, '%s', '%s', '%s', '%s')" % (self.tableName, accountId, username, password, url, note)
+            query = "INSERT INTO %s (account_id, username, psword, app_name, note) VALUES (%s, '%s', '%s', '%s', '%s')" % (self.tableName, accountId, username, password, app_name, note)
         else: 
-            query = "INSERT INTO %s (account_id, username, psword, url) VALUES (%s, '%s', '%s', '%s')" % (self.tableName, accountId, username, password, url)
+            query = "INSERT INTO %s (account_id, username, psword, app_name) VALUES (%s, '%s', '%s', '%s')" % (self.tableName, accountId, username, password, app_name)
         return query
 
     def find_account(self, choice: str) -> str:
