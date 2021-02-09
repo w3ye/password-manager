@@ -18,26 +18,27 @@ class Menu:
             inputPassword = pyip.inputPassword("Password incorrect, please retry or press q to quit: \n")
             if inputPassword == 'q':
                 sys.exit()
+
         global query
         query = GenereateQuery(local.get_user())
 
         self.main_menu()
         
     def main_menu(self):
+        """
+        Main menu the user will see.
+        """
         menuArr = ["Enter an account",
             "Find an account (If you want to remove an account, find the account first)",
             "Generate a password",
             "QUIT"]
         print('=' * 20 + ' MENU ' + '='*20)
-        option = pyip.inputMenu(menuArr, numbered=True, blank=True).lower()
-        if option == "enter an account":
+        option = pyip.inputMenu(menuArr, numbered=True, blank=True)
+        if option == menuArr[0]:
             self.account_menu()
         if option == menuArr[-1]:
             sys.exit()
     
-    def remove_spaces(self, opt):
-        opt = re.compile(r'/s*').sub('',opt)
-        return opt
     
     def account_menu(self):
         menuArr = ["Enter an existing account",
