@@ -1,8 +1,10 @@
+#! python3 
+# crypt.py - Encrypts and decrypts strings
 from cryptography.fernet import Fernet
 import os
 from pathlib import Path
 class Crypt:
-
+    
     def __init__(self):
         self.keys()
 
@@ -32,6 +34,9 @@ class Crypt:
         
     
     def encrypt(self, msg) -> str:
+        """
+        Encrypts the message
+        """
         # msg must be converted to bytes to use the encrypt function
         byteMsg = msg.encode()
         f = Fernet(key)
@@ -41,6 +46,9 @@ class Crypt:
 
 
     def decrypt(self, msg) -> str:
+        """
+        Decryptes a message
+        """
         # msg must be converted from string to bytes for decryption
         encrypted = msg.encode()
         f = Fernet(key)
