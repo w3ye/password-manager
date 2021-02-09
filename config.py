@@ -126,13 +126,27 @@ class Config:
             print("Password does not match please try again")
 
     def validate_email(self):
+        """
+        Validate user email\n
+        User enters email twice, both email values must match and in the right email format
+        """
         emailRegx = re.compile(r'''
             [a-zA-Z0-9._%+-]+       # username
             @                       # @ symbol
             [a-zA-Z0-9.-]+          # domain name
             (\.[a-zA-Z]{2,4})       # dot something
         ''', re.VERBOSE)
-        pass
+
+        while True:
+            e1 = pyip.inputStr("Enter your email:\n")
+            e2 = pyip.inputStr("Confirm your email\n")
+            # If the email format is incorrect, user types in their information again
+            if not (re.search(emailRegx,e1)):
+                print("Email format incorrect")
+                continue
+            # Return the email if e1 == e2
+            if e1 == e2:
+                return e1
 
     def create_user_config(self) -> None:
         """
@@ -172,4 +186,4 @@ class Config:
                 break
             continue
 
-print(Config().validate_password())
+print(Config().validate_email())
