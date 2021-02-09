@@ -1,27 +1,36 @@
 #! python3
 # config.py - Read and store user configs
 import os,re,sys, logging
-logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
+logging.disable()
 from pathlib import Path
 import shelve, pyinputplus as pyip
 from databaseManager import DatabaseManager as dm
 from typing import Dict
 
+# Logging settings 
+logging.basicConfig(level=logging.INFO, format='%(funcName)s:%(lineno)s %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.debug, format='%(fincName)s %(levelname)s - %(message)s')
+
 class Config:
 
     def __init__(self):
         self.validate_path()
+        self.read_user_config()
 
     def set_name(self, name):
+        logging.info('name: %s' % name)
         self.name = name
     
     def set_user(self, user):
+        logging.info('user: %s' % user)
         self.user = user
     
     def set_password(self, password):
+        logging.info('password: %s' % password)
         self.password = password
     
     def set_email(self, email):
+        logging.info('email: %s ' % email)
         self.email = email
 
     def get_name(self):
@@ -44,9 +53,8 @@ class Config:
         path = Path('./config')
         if not path.exists():
             os.mkdir('./config')
-
     
-    def read_user_config(self) -> Dict:
+    def read_user_config(self) -> None:
         """
         Read the user config file
         """
@@ -54,16 +62,15 @@ class Config:
         # Check if the user_config file does not exists
         if list(path.glob('user_config.*')) == []:
             self.user_menu()
-        
-        user = {}
-        # If user_config file exists
-        # Read the contents of it 
-        sFile = shelve.open('./config/user_config')
-        user['user'] = sFile['user']
-        user['name'] = sFile.name['user']
-        user['password'] = sFile['password']
-        sFile.close()
-    
+        else:
+            # If user_config file exists
+            # Read the contents of it 
+            sFile = shelve.open('./config/user_config')
+            self.set_name(sFile['name'])
+            self.set_user(sFile['user'])
+            self.set_password(sFile['password'])
+            self.set_email(sFile['email'])
+            sFile.close()    
 
     def user_menu(self) -> None:
         """
@@ -75,15 +82,14 @@ class Config:
             "Already have a username",
             "QUIT"]
         print('=' * 20 + ' USER ' + '=' * 20)
-        option = pyip.inputMenu(menuArr, numbered=True).lower()
-
-        logging.debug('User select (%s%%)' % option)
+        option = pyip.inputMenu(menuArr, numbered=True)
+        logging.debug('User select: %s' % option)
         # If the user wants to create a new user/new sql table 
         if option == menuArr[0]:
-            self.existing_user()
+            self.create_user_config()
         # If the user already has a sql table
         if option == menuArr[1]:
-            self.create_user_config()
+            self.existing_user()
         # If the user wants to quit
         if option == menuArr[-1]:
             sys.exit()
@@ -99,16 +105,12 @@ class Config:
         name = pyip.inputStr("Enter your name:\n")
         user = pyip.inputStr("Enter your username:\n")
         while self.check_sql_table(user):
-            user = pyip.inputStr("Username Does not exist. Please enter it again. (Enter q to quit or b to go back to the previous menu)")
+            user = pyip.inputStr("Username Does not exist. Please enter it again.\n")
             user = re.compile(r'\s*').sub('',user)
-            # if user enters q: exit the program
-            if user == 'q':
-                sys.exit()
-            # if user enters b: go back to the user menu
-            if user == 'b':
-                self.user_menu()
+        
         password = self.validate_password()
-        # email = self.validate_email()
+        email = self.validate_email()
+        
         logging.debug("Values - name: %s, user: %s, password: %s" % (name,user,password))
 
         self.write_user_config(name, user, password)
@@ -127,14 +129,13 @@ class Config:
         shelfFile.close()
         
             
-    
     def check_sql_table(self, user: str) -> bool:
         """
         Check if the table name exists\n
         True -> table name does not exist\n
         False -> table name exists
         """
-        checkUser = dm().execute_query("SHOW TABLES LIKE '%s'" % user,2)
+        checkUser = dm().execute_query("SHOW TABLES LIKE '%s'" % user.lower(),2)
         # if table doesn't exist in database
         if checkUser == []:
             return True
@@ -152,14 +153,14 @@ class Config:
             app_name varchar(255) not null,
             note varchar(255) default null
             );
-        """ % user, 0)
+        """ % user.lower(), 0)
 
     def validate_password(self) -> str:
         """
         User enters password and confirms that p1 == p2
         """
         while True:
-            p1 = pyip.inputPassword("Enter password:\n")
+            p1 = pyip.inputPassword("Create a password:\n")
             p2 = pyip.inputPassword("Confirm password:\n")
             if p1 == p2:
                 return p1
@@ -196,7 +197,7 @@ class Config:
         
         print("Seems like you're information is not on file. Let's set up")
         # User input their name
-        name = pyip.inputStr("Please enter your name")
+        name = pyip.inputStr("Please enter your name:\n")
         while True:
             # User input their username which is also used as table name in mysql
             user = pyip.inputStr("Please enter a username:\n")
@@ -212,9 +213,7 @@ class Config:
             print("Username is unavailable. Please try again")
         
         password = self.validate_password()
-        # email = self.validate_email()
+        email = self.validate_email()
         logging.debug('Values - name: %s, user: %s, password: %s' % (name,user,password))
 
         self.write_user_config(name, user, password)
-
-Config().check_sql_table()
