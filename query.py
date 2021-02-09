@@ -2,9 +2,12 @@
 # query.py - Generate sql queries
 class GenereateQuery:
     
+<<<<<<< HEAD
     def __init__(self, tableName):
         self.tableName = tableName
 
+=======
+>>>>>>> sqls
     # TODO: Read the user config file to get the table name OR receive the table name from menu
     def new_account(self, accountId: int, username: str, password: str,url: str,note: str) -> str:
         """
