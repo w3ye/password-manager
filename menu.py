@@ -6,7 +6,6 @@ from genereateId import GenerateId
 import pyinputplus as pyip
 import sys,re, password, pprint, logging
 from config import Config
-from crypt import Crypt
 
 logging.getLogger("_auth_switch_request").setLevel(logging.WARNING)
 logging.disable(logging.WARNING)

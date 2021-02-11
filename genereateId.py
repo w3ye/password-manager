@@ -25,7 +25,6 @@ class GenerateId:
         """
         Validate in mysql if accountId exist
         """
-        
         # ? Move the query statement to query.py
-        if dm().execute_query("SELECT * FROM %s WHERE account_id = %s" % (self.tableName,Crypt().encrypt(accountId)), 2) != []:
+        if dm().execute_query("SELECT * FROM %s WHERE account_id = %s" % (self.tableName,accountId), 2) != []:
             self.generate_account_id()
