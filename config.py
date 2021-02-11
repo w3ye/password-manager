@@ -70,14 +70,6 @@ class Config:
             self.set_user(sFile['user'])
             self.set_password(sFile['password'])
             self.set_email(sFile['email'])
-            # Check if the config file username exists in mysql
-            # True = table does not exist
-            if self.check_sql_table(self.get_user):
-                # remove all the purge user config file and start over
-                for filename in Path('./config/').glob('user_config.*'):
-                    os.unlink(filename)
-                self.user_menu()
-                pass
             sFile.close()    
 
     def user_menu(self) -> None:
