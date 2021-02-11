@@ -56,15 +56,16 @@ class Menu:
         """
         Adding an existing account
         """
-        accountId = gId().generate_account_id()
-        username = Crypt().encrypt(pyip.inputStr("Enter username:\n"))
-        password = Crypt().encrypt(Config.validate_password())
-        appName = Crypt().encrypt(pyip.inputStr("Enter the App name or url:\n"))
-        note = Crypt().encrypt(pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n"))
+        accountId = Crypt().encrypt(str(gId().generate_account_id()))
+        username = Crypt().encrypt(pyip.inputStr("Enter username:\n"),blank=False)
+        password = Crypt().encrypt(Config.validate_password(), blank=False)
+        appName = Crypt().encrypt(pyip.inputStr("Enter the App name or url:\n"), blank=False)
+        note = Crypt().encrypt(pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n"),blank=True)
         
-        query.new_account(accountId, username, password, appName, note)
+        dm.execute_query(query.new_account(accountId, username, password, appName, note))
 
     def find_account(self):
+        
         pass
 
     def remove_account(self):
@@ -72,16 +73,7 @@ class Menu:
 
 class Test:
     def add_account(self):
-        accountId = gId().generate_account_id()
-        username = pyip.inputStr("Enter username")
-        password = Config().validate_password()
-        appName = pyip.inputStr("Enter the App name or url")
-        notes = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip)")
-        print(accountId)
-        print(username)
-        print(password)
-        print(appName)
-        print(notes)
+        pass
         
 
 Test().add_account()
