@@ -1,15 +1,11 @@
 #! python3
 # config.py - Read and store user configs
-import os,re,sys, logging
+import os,re,sys
 from pathlib import Path
 import shelve, pyinputplus as pyip
 from databaseManager import DatabaseManager as dm
 from typing import Dict
 
-# Logging settings
-logging.disable()
-logging.basicConfig(level=logging.INFO, format='%(funcName)s:%(lineno)s %(levelname)s - %(message)s')
-logging.basicConfig(level=logging.debug, format='%(fincName)s %(levelname)s - %(message)s')
 
 class Config:
 
@@ -18,19 +14,15 @@ class Config:
         self.read_user_config()
 
     def set_name(self, name):
-        logging.info('name: %s' % name)
         self.name = name
     
     def set_user(self, user):
-        logging.info('user: %s' % user)
         self.user = user
     
     def set_password(self, password):
-        logging.info('password: %s' % password)
         self.password = password
     
     def set_email(self, email):
-        logging.info('email: %s ' % email)
         self.email = email
 
     def get_name(self):
@@ -75,14 +67,13 @@ class Config:
         """
         User can chose between creating a new sql table or enter an exisiting one
         """
-        logging.debug('user_menu BEGIN')
 
         menuArr = ["Create a new user",
             "Already have a username",
             "QUIT"]
         print('=' * 20 + ' USER ' + '=' * 20)
         option = pyip.inputMenu(menuArr, numbered=True)
-        logging.debug('User select: %s' % option)
+
         # If the user wants to create a new user/new sql table 
         if option == menuArr[0]:
             self.create_user_config()
@@ -93,13 +84,11 @@ class Config:
         if option == menuArr[-1]:
             sys.exit()
         
-        logging.debug('user_menu END')
     
     def existing_user(self) -> None:
         """
         If the user already have an existing user
         """
-        logging.debug("existing_user BEGIN")
 
         name = pyip.inputStr("Enter your name:\n")
         user = pyip.inputStr("Enter your username:\n").lower()
@@ -110,10 +99,8 @@ class Config:
         password = self.validate_password()
         email = self.validate_email()
         
-        logging.debug("Values - name: %s, user: %s, password: %s" % (name,user,password))
 
         self.write_user_config(name, user, password)
-        logging.debug('existing_user END')
     
     def write_user_config(self, name: str, user:str, password:str, email="") -> None:
         """
@@ -192,7 +179,6 @@ class Config:
         """
         Creates a user config file
         """
-        logging.debug('create_user_config BEGIN')
         
         print("Seems like you're information is not on file. Let's set up")
         # User input their name
@@ -213,6 +199,5 @@ class Config:
         
         password = self.validate_password()
         email = self.validate_email()
-        logging.debug('Values - name: %s, user: %s, password: %s' % (name,user,password))
 
         self.write_user_config(name, user, password)
