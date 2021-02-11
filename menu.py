@@ -8,25 +8,27 @@ import sys,re, password, pprint, logging
 from config import Config
 from crypt import Crypt
 
-logging.getLogger("Menu").setLevel(logging.DEBUG)
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.getLogger("_auth_switch_request").setLevel(logging.WARNING)
+logging.disable(logging.WARNING)
+logging.basicConfig(level=logging.DEBUG, format='%(funcName)s:%(lineno)d - %(levelname)s - %(message)s')
 
 class Menu:
 
     def __init__(self):
+        #initializing global variables
+        global query, gId, dbm
         local = Config()
         inputPassword = pyip.inputPassword("Hi, " + local.get_name() + ". Please enter your password\n")
         while inputPassword != str(local.get_password()):
             inputPassword = pyip.inputPassword("Password incorrect, please retry or press q to quit: \n")
             if inputPassword == 'q':
                 sys.exit()
-
-        global query
+        dbm = dm()
         query = GenereateQuery(local.get_user())
-        global gId
         gId = GenerateId(local.get_user())
 
-        self.main_menu()
+        #self.main_menu()
+        self.account_menu()
         
     def main_menu(self):
         """
@@ -62,17 +64,15 @@ class Menu:
         """
         Adding an existing account
         """
-        logging.debug('Method start')
-        accountId = gId.generate_account_id()
-        username = pyip.inputStr("Enter username:\n")
+        c = Crypt()
+        accountId = str(gId.generate_account_id())
+        username = pyip.inputStr("Enter account name:\n")
         password = Config().validate_password()
         appName = pyip.inputStr("Enter the App name or url:\n")
         note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
 
-        print('accountId: %s  | username: %s | password: %s | appName: %s | note: %s' % (accountId, username, password, appName, note))
-        
-        # k = (query.new_account(accountId, username, password, appName, note))
-        # print(k)
+        dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(password), c.encrypt(appName), c.encrypt(note)))
+        print("Account Name: %s\nPassword: %s\n App Name: %s\n note: %s\nHas uploaded successfully" % (username, password, appName, note))
 
     def find_account(self):
         
