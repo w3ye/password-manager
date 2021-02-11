@@ -1,13 +1,13 @@
 #! python3
 # config.py - Read and store user configs
 import os,re,sys, logging
-logging.disable()
 from pathlib import Path
 import shelve, pyinputplus as pyip
 from databaseManager import DatabaseManager as dm
 from typing import Dict
 
-# Logging settings 
+# Logging settings
+logging.disable()
 logging.basicConfig(level=logging.INFO, format='%(funcName)s:%(lineno)s %(levelname)s - %(message)s')
 logging.basicConfig(level=logging.debug, format='%(fincName)s %(levelname)s - %(message)s')
 
