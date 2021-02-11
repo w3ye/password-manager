@@ -147,7 +147,7 @@ class Config:
         """
         dm().execute_query("""
             create table %s(
-            account_id int primary key,
+            account_id varchar(255) primary key,
             username varchar(255) not null,
             psword varchar(255) not null,
             app_name varchar(255) not null,
