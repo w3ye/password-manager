@@ -70,6 +70,14 @@ class Config:
             self.set_user(sFile['user'])
             self.set_password(sFile['password'])
             self.set_email(sFile['email'])
+            # Check if the config file username exists in mysql
+            # True = table does not exist
+            if self.check_sql_table(self.get_user):
+                # remove all the purge user config file and start over
+                for filename in Path('./config/').glob('user_config.*'):
+                    os.unlink(filename)
+                self.user_menu()
+                pass
             sFile.close()    
 
     def user_menu(self) -> None:
@@ -103,9 +111,9 @@ class Config:
         logging.debug("existing_user BEGIN")
 
         name = pyip.inputStr("Enter your name:\n")
-        user = pyip.inputStr("Enter your username:\n")
+        user = pyip.inputStr("Enter your username:\n").lower()
         while self.check_sql_table(user):
-            user = pyip.inputStr("Username Does not exist. Please enter it again.\n")
+            user = pyip.inputStr("Username Does not exist. Please enter it again.\n").lower()
             user = re.compile(r'\s*').sub('',user)
         
         password = self.validate_password()
@@ -135,7 +143,7 @@ class Config:
         True -> table name does not exist\n
         False -> table name exists
         """
-        checkUser = dm().execute_query("SHOW TABLES LIKE '%s'" % user.lower(),2)
+        checkUser = dm().execute_query("SHOW TABLES LIKE '%s'" % user,2)
         # if table doesn't exist in database
         if checkUser == []:
             return True
@@ -200,7 +208,7 @@ class Config:
         name = pyip.inputStr("Please enter your name:\n")
         while True:
             # User input their username which is also used as table name in mysql
-            user = pyip.inputStr("Please enter a username:\n")
+            user = pyip.inputStr("Please enter a username:\n").lower()
             # Remove spaces in the username
             user = re.compile(r'\s*').sub('',user)
             
