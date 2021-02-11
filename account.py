@@ -29,7 +29,7 @@ class Account:
             note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
 
             dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(password), c.encrypt(appName), c.encrypt(note)))
-            print("Account Name: %s\nPassword: %s\n App Name: %s\n note: %s\nHas uploaded successfully" % (username, password, appName, note))
+            print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, password, appName, note))
         
     def create_new_account(self):
         """
