@@ -62,15 +62,14 @@ class Config:
         # Check if the user_config file does not exists
         if list(path.glob('user_config.*')) == []:
             self.user_menu()
-        else:
-            # If user_config file exists
-            # Read the contents of it 
-            sFile = shelve.open('./config/user_config')
-            self.set_name(sFile['name'])
-            self.set_user(sFile['user'])
-            self.set_password(sFile['password'])
-            self.set_email(sFile['email'])
-            sFile.close()    
+        # If user_config file exists
+        # Read the contents of it 
+        sFile = shelve.open('./config/user_config')
+        self.set_name(sFile['name'])
+        self.set_user(sFile['user'])
+        self.set_password(sFile['password'])
+        self.set_email(sFile['email'])
+        sFile.close()    
 
     def user_menu(self) -> None:
         """
