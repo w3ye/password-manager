@@ -2,11 +2,14 @@
 # menu.py - A menu for the user 
 from databaseManager import DatabaseManager as dm
 from query import GenereateQuery
-from genereateId import GenerateId as gId
+from genereateId import GenerateId
 import pyinputplus as pyip
-import sys,re, password, pprint
+import sys,re, password, pprint, logging
 from config import Config
 from crypt import Crypt
+
+logging.getLogger("Menu").setLevel(logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Menu:
 
@@ -20,8 +23,10 @@ class Menu:
 
         global query
         query = GenereateQuery(local.get_user())
+        global gId
+        gId = GenerateId(local.get_user())
 
-        #self.main_menu()
+        self.main_menu()
         
     def main_menu(self):
         """
@@ -47,6 +52,7 @@ class Menu:
         print('=' * 20 + ' ACCOUNT ' + '='*20)
         option = pyip.inputMenu(menuArr, numbered=True, blank=True)
         
+        if option == menuArr[0]: self.add_existing_account()
         if option == menuArr[-2]:
             self.main_menu()
         if option == menuArr[-1]:
@@ -56,13 +62,17 @@ class Menu:
         """
         Adding an existing account
         """
-        accountId = Crypt().encrypt(str(gId().generate_account_id()))
-        username = Crypt().encrypt(pyip.inputStr("Enter username:\n"),blank=False)
-        password = Crypt().encrypt(Config.validate_password(), blank=False)
-        appName = Crypt().encrypt(pyip.inputStr("Enter the App name or url:\n"), blank=False)
-        note = Crypt().encrypt(pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n"),blank=True)
+        logging.debug('Method start')
+        accountId = gId.generate_account_id()
+        username = pyip.inputStr("Enter username:\n")
+        password = Config().validate_password()
+        appName = pyip.inputStr("Enter the App name or url:\n")
+        note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
+
+        print('accountId: %s  | username: %s | password: %s | appName: %s | note: %s' % (accountId, username, password, appName, note))
         
-        dm.execute_query(query.new_account(accountId, username, password, appName, note))
+        # k = (query.new_account(accountId, username, password, appName, note))
+        # print(k)
 
     def find_account(self):
         
@@ -73,7 +83,15 @@ class Menu:
 
 class Test:
     def add_account(self):
-        pass
+        #accountId = gId().generate_account_id()
+        username = pyip.inputStr("Enter username")
+        password = Config().validate_password()
+        appName = pyip.inputStr("Enter the App name or url")
+        notes = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip)")
+        print(accountId)
+        print(username)
+        print(password)
+        print(appName)
+        print(notes)
         
-
-Test().add_account()
+Menu()
