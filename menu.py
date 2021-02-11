@@ -6,6 +6,7 @@ from genereateId import GenerateId as gId
 import pyinputplus as pyip
 import sys,re, password, pprint
 from config import Config
+from crypt import Crypt
 
 class Menu:
 
@@ -56,10 +57,10 @@ class Menu:
         Adding an existing account
         """
         accountId = gId().generate_account_id()
-        username = pyip.inputStr("Enter username:\n")
-        password = Config.validate_password()
-        appName = pyip.inputStr("Enter the App name or url:\n")
-        note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n")
+        username = Crypt().encrypt(pyip.inputStr("Enter username:\n"))
+        password = Crypt().encrypt(Config.validate_password())
+        appName = Crypt().encrypt(pyip.inputStr("Enter the App name or url:\n"))
+        note = Crypt().encrypt(pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n"))
         
         query.new_account(accountId, username, password, appName, note)
 
