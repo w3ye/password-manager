@@ -5,6 +5,10 @@ from databaseManager import DatabaseManager as dm
 
 class GenerateId:
 
+
+    def __init__(self, tableName:str):
+        self.tableName = tableName
+    
     def generate_account_id(self) -> int:
         """
         Generate a 10 digit random number
@@ -21,5 +25,5 @@ class GenerateId:
         Validate in mysql if accountId exist
         """
         # ? Move the query statement to query.py
-        if dm().execute_query("SELECT * FROM accounts.acc WHERE account_id = %s" % accountId, 2) != []:
+        if dm().execute_query("SELECT * FROM %s WHERE account_id = %s" % (self.tableName,accountId), 2) != []:
             self.generate_account_id()
