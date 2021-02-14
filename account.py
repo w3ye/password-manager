@@ -4,7 +4,7 @@ from databaseManager import DatabaseManager as dm
 from query import GenereateQuery
 from genereateId import GenerateId
 import pyinputplus as pyip
-import sys,re, password, logging, pyperclip
+import sys,re, password, logging, pyperclip, pprint
 from config import Config
 from crypt import Crypt
 
@@ -17,7 +17,7 @@ class Account:
         query = GenereateQuery(local.get_user())
         gId = GenerateId(local.get_user())
 
-    def add_existing_account(self):
+    def add_existing_account(self) -> None:
         """
         Adding an existing account
         """
@@ -38,7 +38,7 @@ class Account:
         dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(password), appName, c.encrypt(note)))
         print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, password, appName, note))
         
-    def create_new_account(self):
+    def create_new_account(self) -> None:
         """
         Creating a new account\n 
         Optional password genereation and copied to clipboad
@@ -74,14 +74,42 @@ class Account:
         dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(psw), appName, c.encrypt(note)))
         print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, psw, appName, note))
         
-    def find_account(self):
+    def find_account(self) -> None:
         """
         Find account information based on: App name
         """
         c = Crypt()
         appName = pyip.inputStr("Enter the app name for the account you would like to find:\n")
         result = dbm.execute_query(query.find_account(appName),2)
-        
+        while result == []:
+            appName = pyip.inputStr("Could not find what you're looking for. Please try again or press q to quit\n")
+            if appName == 'q':
+                sys.exit()
+            result = dbm.execute_query(query.find_account(appName),2)
+        resultList = []
+        infoList = []
+        i = 0
+        for i in result:
+            for x,y in enumerate(i):
+                if x == 0 or x == 3:
+                    infoList.append(y)
+                else: 
+                    infoList.append(c.decrypt(y))
+            resultList.append(infoList)
+            infoList = []
+            
+        infoList = self.get_selected_info_list(resultList)
+    
+    def get_selected_info_list(self, resultList: List[List]) -> List:
+        """
+        Input Menu for resultList
+        """
+        for x,y in enumerate(resultList):
+            print(x , '\t', y)
+        resultInput = pyip.inputInt('Enter the account number you wish to chose')
+        while resultInput > len(resultInput):
+            resultInput = pyip.inputInt('Please try again')
+        return resultList[resultInput]
         
 
     def remove_account(self):
