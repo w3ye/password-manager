@@ -16,11 +16,11 @@ class GenereateQuery:
             query = "INSERT INTO %s (account_id, username, psword, app_name) VALUES ('%s', '%s', '%s', '%s')" % (self.tableName, accountId, username, password, app_name)
         return query
 
-    def find_account(self, choice: str) -> str:
+    def find_account(self, appName: str) -> str:
         """
         Generate a queries to find all information to an account
         """
-        query = "SELECT * FROM %s WHERE %s " % (self.tableName, choice)
+        query = "SELECT * FROM %s WHERE app_name = '%s'" % (self.tableName, appName)
         return query
     
     def delete_account(self, accountId: int) -> str:

@@ -58,6 +58,8 @@ class Account:
                     psw = str(password.generate_password())
                 else: 
                     psw = str(password.generate_password(2))
+                print("Password %s copied to clipboard" % psw)
+                pyperclip.copy(psw)
             elif passOption == passOpt[1]:
                 psw = Config().validate_password()
             appName = pyip.inputStr("Enter the App name or url:\n")
@@ -68,13 +70,15 @@ class Account:
             if yesno == 'yes':
                 break
             continue
+        # Encrypt values to store into sql
         dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(psw), c.encrypt(appName), c.encrypt(note)))
         print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, psw, appName, note))
         
     def find_account(self):
-        p = password.generate_password()
-        print(p)
-        pass
+        """
+        Find account information based on: App name
+        """
+        pass        
 
     def remove_account(self):
         pass
