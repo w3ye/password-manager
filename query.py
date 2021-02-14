@@ -20,7 +20,7 @@ class GenereateQuery:
         """
         Generate a queries to find all information to an account
         """
-        query = "SELECT * FROM %s WHERE app_name = '%s'" % (self.tableName, appName)
+        query = f"SELECT * FROM {self.tableName} WHERE app_name like '%{appName}%'"
         return query
     
     def delete_account(self, accountId: int) -> str:

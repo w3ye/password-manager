@@ -35,7 +35,7 @@ class Account:
                 break
             continue
 
-        dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(password), c.encrypt(appName), c.encrypt(note)))
+        dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(password), appName, c.encrypt(note)))
         print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, password, appName, note))
         
     def create_new_account(self):
@@ -71,16 +71,20 @@ class Account:
                 break
             continue
         # Encrypt values to store into sql
-        dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(psw), c.encrypt(appName), c.encrypt(note)))
+        dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(psw), appName, c.encrypt(note)))
         print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, psw, appName, note))
         
     def find_account(self):
         """
         Find account information based on: App name
         """
-        pass        
+        c = Crypt()
+        appName = pyip.inputStr("Enter the app name for the account you would like to find:\n")
+        result = dbm.execute_query(query.find_account(appName),2)
+        
+        
 
     def remove_account(self):
         pass
 
-Account().create_new_account() 
+Account().find_account() 
