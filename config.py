@@ -146,7 +146,7 @@ class Config:
         User enters password and confirms that p1 == p2
         """
         while True:
-            p1 = pyip.inputPassword("Create a password:\n")
+            p1 = pyip.inputPassword("Enter your password:\n")
             p2 = pyip.inputPassword("Confirm password:\n")
             if p1 == p2:
                 return p1

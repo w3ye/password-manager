@@ -18,33 +18,65 @@ class Account:
         gId = GenerateId(local.get_user())
 
     def add_existing_account(self):
-            """
-            Adding an existing account
-            """
+        """
+        Adding an existing account
+        """
+        # User information validation
+        while True: 
             c = Crypt()
             accountId = str(gId.generate_account_id())
             username = pyip.inputStr("Enter account name:\n")
             password = Config().validate_password()
             appName = pyip.inputStr("Enter the App name or url:\n")
             note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
+            print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s" % (username, password, appName, note))
+            yesno = pyip.inputYesNo("Is the information listed above correct?  y/n")
+            if yesno == 'yes':
+                break
+            continue
 
-            dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(password), c.encrypt(appName), c.encrypt(note)))
-            print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, password, appName, note))
+        dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(password), c.encrypt(appName), c.encrypt(note)))
+        print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, password, appName, note))
         
     def create_new_account(self):
         """
         Creating a new account\n 
         Optional password genereation and copied to clipboad
         """
-        c = Crypt()
-        accountId = str(gId.generate_account_id())
-        username = pyip.inputStr("Enter account name:\n")
+        while True:
+            c = Crypt()
+            accountId = str(gId.generate_account_id())
+            username = pyip.inputStr("Enter account name:\n")
+            passOpt = ["Generate a password", "Enter your own password"]
+            passOption = pyip.inputMenu(passOpt, numbered=True)
+            # If the user wants to genereate a password
+            if passOption == passOpt[0]:
+                passOpt = ["Genereate a password containing at lease 1 Upper Case, 1 number and 1 symbol", "Genereate a alphanumeric password"]
+                passOption = pyip.inputMenu(passOpt, numbered=True)
+                # If the user choses for a password with symbols
+                if passOption == passOpt[0]:
+                    psw = str(password.generate_password())
+                else: 
+                    psw = str(password.generate_password(2))
+            elif passOption == passOpt[1]:
+                psw = Config().validate_password()
+            appName = pyip.inputStr("Enter the App name or url:\n")
+            note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
+            # user checks the information is correct
+            print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s" % (username, psw, appName, note))
+            yesno = pyip.inputYesNo("Is the information listed above correct?  y/n")
+            if yesno == 'yes':
+                break
+            continue
+        dbm.execute_query(query.new_account(c.encrypt(accountId), c.encrypt(username), c.encrypt(psw), c.encrypt(appName), c.encrypt(note)))
+        print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, psw, appName, note))
         
     def find_account(self):
-        
+        p = password.generate_password()
+        print(p)
         pass
 
     def remove_account(self):
         pass
 
-Account().add_existing_account() 
+Account().create_new_account() 
