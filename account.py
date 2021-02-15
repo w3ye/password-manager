@@ -7,6 +7,7 @@ import pyinputplus as pyip
 import sys,re, password, logging, pyperclip, pprint
 from config import Config
 from crypt import Crypt
+from typing import List
 
 class Account:
     def __init__(self):
@@ -97,6 +98,33 @@ class Account:
                     infoList.append(c.decrypt(y))
             resultList.append(infoList)
             infoList = []
-        print(resultList)
+        
+    
+    def select_account(self, resultList: List[List]) -> List:
+        """
+        If there is more than 1 account with the same app, the user gets to chose which account to modify or get password
+        """
+        # When there is only 1 account with an app
+        if len(resultList) == 1:
+            print(*resultList)
+            pyperclip.copy(resultList[0][2])
+            print("Password copied to clipboard")
+            return resultList[0]
+        # When there are multiple account linked to an app
+        else: 
+            for num, account in enumerate(resultList):
+                print(num+1, '\t', account)
+            choice = pyip.inputInt("Select the account you want to choose:\t")
+            while choice-1 > len(resultList):
+                choice = pyip.inputInt("Option unavailable. Please choose again:\t")
+            print(resultList[choice-1])
+            pyperclip.copy(resultList[choice-1][2])
+            print("Password copied to clipboard")
+            return resultList[choice-1]
 
-Account().find_account() 
+
+
+
+resultList = [['6369773579', 'benwgye@gmail.com', 'DUuMf579DPEv9', 'www.discord.com', ''], ['7069138754', 'dddd', 'y&riv2TRbP8r', 'www.discord.com', '123321'], ['919253408', 'w3ye@pm.me', ',~QjPrkq&25M4', 'www.discord.com', '']]
+singleList = [['6369773579', 'benwgye@gmail.com', 'DUuMf579DPEv9', 'www.discord.com', '']]
+Account().select_account(resultList) 
