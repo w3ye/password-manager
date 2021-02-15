@@ -1,6 +1,6 @@
 #! python3
 # config.py - Read and store user configs
-import os,re,sys
+import os,re,sys, password
 from pathlib import Path
 import shelve, pyinputplus as pyip
 from databaseManager import DatabaseManager as dm
@@ -96,7 +96,7 @@ class Config:
             user = pyip.inputStr("Username Does not exist. Please enter it again.\n").lower()
             user = re.compile(r'\s*').sub('',user)
         
-        password = self.validate_password()
+        password = password.confirm_password()
         email = self.validate_email()
         
 
@@ -140,17 +140,6 @@ class Config:
             note varchar(255) default null
             );
         """ % user.lower(), 0)
-
-    def validate_password(self) -> str:
-        """
-        User enters password and confirms that p1 == p2
-        """
-        while True:
-            p1 = pyip.inputPassword("Enter your password:\n")
-            p2 = pyip.inputPassword("Confirm password:\n")
-            if p1 == p2:
-                return p1
-            print("Password does not match please try again")
 
     def validate_email(self):
         """
@@ -197,7 +186,7 @@ class Config:
             # If the table exist
             print("Username is unavailable. Please try again")
         
-        password = self.validate_password()
+        password = password.confirm_password
         email = self.validate_email()
 
         self.write_user_config(name, user, password)

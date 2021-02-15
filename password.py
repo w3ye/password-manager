@@ -26,3 +26,14 @@ def generate_password(mode=1) -> str:
     else: 
         password = ''.join(secrets.choice(alpha_numeric) for i in range(length))
     return password
+
+def confirm_password(self) -> str:
+    """
+    User enters password and confirms that p1 == p2
+    """
+    while True:
+        p1 = pyip.inputPassword("Enter your password:\n")
+        p2 = pyip.inputPassword("Confirm password:\n")
+        if p1 == p2:
+            return p1
+        print("Password does not match please try again")
