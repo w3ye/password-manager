@@ -2,7 +2,7 @@
 # password.py - Creates a password
 import string
 import secrets
-import random
+import random, pyinputplus as pyip
 
 def generate_password(mode=1) -> str:
     """
