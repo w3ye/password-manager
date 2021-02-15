@@ -97,22 +97,6 @@ class Account:
                     infoList.append(c.decrypt(y))
             resultList.append(infoList)
             infoList = []
-            
-        infoList = self.get_selected_info_list(resultList)
-    
-    def get_selected_info_list(self, resultList: List[List]) -> List:
-        """
-        Input Menu for resultList
-        """
-        for x,y in enumerate(resultList):
-            print(x , '\t', y)
-        resultInput = pyip.inputInt('Enter the account number you wish to chose')
-        while resultInput > len(resultInput):
-            resultInput = pyip.inputInt('Please try again')
-        return resultList[resultInput]
-        
-
-    def remove_account(self):
-        pass
+        print(resultList)
 
 Account().find_account() 
