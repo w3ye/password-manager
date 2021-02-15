@@ -27,10 +27,10 @@ class GenereateQuery:
         """
         Generate a query to delete an account by accountId(primary key)
         """
-        query = "DELETE FROM %s WHERE account_id = %s" % (self.tableName, countId)
+        query = "DELETE FROM %s WHERE account_id = %s" % (self.tableName, accountId)
         return query
     
-    def update_account(self, accountId: int, newPassword: str) -> str:
+    def change_password(self, accountId: int, newPassword: str) -> str:
         """
         Generate an query to update account password using accountId(primary key)
         """
