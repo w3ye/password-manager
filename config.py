@@ -189,7 +189,7 @@ class Config:
             # If the table exist
             print("Username is unavailable. Please try again")
         
-        password = password.confirm_password
+        pswd = password.confirm_password()
         email = self.validate_email()
 
-        self.write_user_config(name, user, password)
+        self.write_user_config(name, user, pswd)

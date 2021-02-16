@@ -4,5 +4,5 @@ __*
 config/
 build/
 dist/
-menu.spec
+*.spec
 *.bat

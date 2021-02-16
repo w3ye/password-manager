@@ -76,10 +76,13 @@ class Account:
         else:
             result = dbm.execute_query(query.find_account(appName),2)
         while result == []:
-            appName = pyip.inputStr("Could not find what you're looking for. Please try again or press q to quit\n")
+            appName = pyip.inputStr("Could not find what you're looking for. Your database could be empty. Please try again or press q to quit\n")
             if appName == 'q':
                 sys.exit()
-            result = dbm.execute_query(query.find_account(appName),2)
+            if appName == '#all#':
+                result = dbm.execute_query(query.find_all(),2)
+            else:
+                result = dbm.execute_query(query.find_account(appName),2)
         resultList = []
         infoList = []
         i = 0
