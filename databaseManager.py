@@ -1,9 +1,9 @@
 #! python3 
 # databaseManger.py - Connects to mysql database and execute queries
 from typing import List, Dict
-import mysql.connector
+import mysql.connector, logging
 from readFile import Credentials as rc
-
+logging.basicConfig(level=logging.INFO, format="%(funcName)s - %(levelname)s : %(message)s")
 class DatabaseManager:
     mydb = None
     cursor = None
@@ -34,7 +34,7 @@ class DatabaseManager:
             )
             # Checking if the database is connected
             if self.mydb.is_connected():
-                print("Connected")
+                logging.info("Connected")
                 
         # Catching sql.connector Errors
         except mysql.connector.errors.InterfaceError as e:

@@ -28,24 +28,25 @@ class Account:
         while True: 
             accountId = str(gId.generate_account_id())
             username = pyip.inputStr("Enter account name:\n")
-            password = password.confirm_password()
+            pswd = password.confirm_password()
             appName = pyip.inputStr("Enter the App name or url:\n")
             note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
-            print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s" % (username, password, appName, note))
-            yesno = pyip.inputYesNo("Is the information listed above correct?  y/n")
+            print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s" % (username, pswd, appName, note))
+            yesno = pyip.inputYesNo("Is the information listed above correct?  y/n:\t")
             if yesno == 'yes':
                 break
             continue
 
-        dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(password), appName, c.encrypt(note)))
+        dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(pswd), appName, c.encrypt(note)))
         clear.clear()
-        print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, password, appName, note))
+        print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, pswd, appName, note))
         
     def create_new_account(self) -> None:
         """
         Creating a new account\n 
         Optional password genereation and copied to clipboad
         """
+        clear.clear()
         while True:
             accountId = str(gId.generate_account_id())
             username = pyip.inputStr("Enter account name:\n")
@@ -54,7 +55,7 @@ class Account:
             note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
             # user checks the information is correct
             print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s" % (username, psw, appName, note))
-            yesno = pyip.inputYesNo("Is the information listed above correct?  y/n")
+            yesno = pyip.inputYesNo("Is the information listed above correct?  y/n\t")
             if yesno == 'yes':
                 break
             continue
@@ -119,13 +120,13 @@ class Account:
         """
         User is presented with options to do with the account
         """
-        accountOpt = ["Update Password", "Remove account", "Exit"]
+        accountOpt = ["Update Password", "Remove account", "Main Menu"]
         choice = pyip.inputMenu(accountOpt,blank=True, numbered=True, prompt="Please select one of the following (Empty will take you back to find account):\n")
         # if choice is left blank. Go back to the previous section
         if len(choice) == 0:
             self.find_account()
         if choice == accountOpt[-1]:
-            sys.exit()
+            return None
         # Update Password
         if choice == accountOpt[0]:
             clear.clear()
@@ -145,5 +146,3 @@ class Account:
         if choice == accountOpt[1]:
             dbm.execute_query(query.delete_account(account[0]))
             print(account[0], "\tSuccessful deleted")
-
-Account().find_account() 
