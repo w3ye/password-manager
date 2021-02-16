@@ -34,5 +34,5 @@ class GenereateQuery:
         """
         Generate an query to update account password using accountId(primary key)
         """
-        query = "UPDATE %s SET password = '%s' WHERE account_id = %s" % (self.tableName, accountId, newPassword)
+        query = "UPDATE %s SET psword = '%s' WHERE account_id = '%s'" % (self.tableName, newPassword, accountId)
         return query

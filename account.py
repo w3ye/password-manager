@@ -8,15 +8,17 @@ import sys,re, password, logging, pyperclip, pprint
 from config import Config
 from crypt import Crypt
 from typing import List
+import clear
 
 class Account:
     def __init__(self):
         #initializing global variables
         local = Config()
-        global query, gId, dbm
+        global query, gId, dbm, c
         dbm = dm()
         query = GenereateQuery(local.get_user())
         gId = GenerateId(local.get_user())
+        c = Crypt()
 
     def add_existing_account(self) -> None:
         """
@@ -24,10 +26,9 @@ class Account:
         """
         # User information validation
         while True: 
-            c = Crypt()
             accountId = str(gId.generate_account_id())
             username = pyip.inputStr("Enter account name:\n")
-            password = Config().validate_password()
+            password = password.confirm_password()
             appName = pyip.inputStr("Enter the App name or url:\n")
             note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
             print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s" % (username, password, appName, note))
@@ -37,6 +38,7 @@ class Account:
             continue
 
         dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(password), appName, c.encrypt(note)))
+        clear.clear()
         print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, password, appName, note))
         
     def create_new_account(self) -> None:
@@ -45,24 +47,9 @@ class Account:
         Optional password genereation and copied to clipboad
         """
         while True:
-            c = Crypt()
             accountId = str(gId.generate_account_id())
             username = pyip.inputStr("Enter account name:\n")
-            passOpt = ["Generate a password", "Enter your own password"]
-            passOption = pyip.inputMenu(passOpt, numbered=True)
-            # If the user wants to genereate a password
-            if passOption == passOpt[0]:
-                passOpt = ["Genereate a password containing at lease 1 Upper Case, 1 number and 1 symbol", "Genereate a alphanumeric password"]
-                passOption = pyip.inputMenu(passOpt, numbered=True)
-                # If the user choses for a password with symbols
-                if passOption == passOpt[0]:
-                    psw = str(password.generate_password())
-                else: 
-                    psw = str(password.generate_password(2))
-                print("Password %s copied to clipboard" % psw)
-                pyperclip.copy(psw)
-            elif passOption == passOpt[1]:
-                psw = Config().validate_password()
+            psw = password.password_choice()
             appName = pyip.inputStr("Enter the App name or url:\n")
             note = pyip.inputStr("Enter note (OPTIONAL - Press ENTER key to skip):\n", blank=True)
             # user checks the information is correct
@@ -73,14 +60,16 @@ class Account:
             continue
         # Encrypt values to store into sql
         dbm.execute_query(query.new_account(accountId, c.encrypt(username), c.encrypt(psw), appName, c.encrypt(note)))
+        clear.clear()
         print("Account Name: %s\nPassword: %s\nApp Name: %s\nnote: %s\nHas uploaded successfully" % (username, psw, appName, note))
         
     def find_account(self) -> None:
         """
         Find account information based on: App name
         """
-        c = Crypt()
+        clear.clear()
         appName = pyip.inputStr("Enter the app name for the account you would like to find:\n")
+        clear.clear()
         result = dbm.execute_query(query.find_account(appName),2)
         while result == []:
             appName = pyip.inputStr("Could not find what you're looking for. Please try again or press q to quit\n")
@@ -98,6 +87,9 @@ class Account:
                     infoList.append(c.decrypt(y))
             resultList.append(infoList)
             infoList = []
+            
+        selectedAccount = self.select_account(resultList)
+        self.account_options(selectedAccount)
         
     
     def select_account(self, resultList: List[List]) -> List:
@@ -108,7 +100,7 @@ class Account:
         if len(resultList) == 1:
             print(*resultList)
             pyperclip.copy(resultList[0][2])
-            print("Password copied to clipboard")
+            print('*'*10, "Password copied to clipboard", '*'*10)
             return resultList[0]
         # When there are multiple account linked to an app
         else: 
@@ -117,14 +109,41 @@ class Account:
             choice = pyip.inputInt("Select the account you want to choose:\t")
             while choice-1 > len(resultList):
                 choice = pyip.inputInt("Option unavailable. Please choose again:\t")
+            clear.clear()
             print(resultList[choice-1])
             pyperclip.copy(resultList[choice-1][2])
-            print("Password copied to clipboard")
+            print('*'*10, "Password copied to clipboard", '*'*10)
             return resultList[choice-1]
+        
+    def account_options(self, account: List) -> None:
+        """
+        User is presented with options to do with the account
+        """
+        accountOpt = ["Update Password", "Remove account", "Exit"]
+        choice = pyip.inputMenu(accountOpt,blank=True, numbered=True, prompt="Please select one of the following (Empty will take you back to find account):\n")
+        # if choice is left blank. Go back to the previous section
+        if len(choice) == 0:
+            self.find_account()
+        if choice == accountOpt[-1]:
+            sys.exit()
+        # Update Password
+        if choice == accountOpt[0]:
+            clear.clear()
+            print("Changing password for: ", end='   ')
+            for i in account:
+                print('   |   ', i , end=' '*3)
+            print()
+            pswd = password.password_choice()
+            print(pswd)
+            dbm.execute_query(query.change_password(account[0],c.encrypt(pswd)))
+            account[2] = pswd
+            print("Password change success!", end=' '*3)
+            for i in account:
+                print('   |   ', i , end=' '*3)
+            print()
+        # Delete account
+        if choice == accountOpt[1]:
+            dbm.execute_query(query.delete_account(account[0]))
+            print(account[0], "\tSuccessful deleted")
 
-
-
-
-resultList = [['6369773579', 'benwgye@gmail.com', 'DUuMf579DPEv9', 'www.discord.com', ''], ['7069138754', 'dddd', 'y&riv2TRbP8r', 'www.discord.com', '123321'], ['919253408', 'w3ye@pm.me', ',~QjPrkq&25M4', 'www.discord.com', '']]
-singleList = [['6369773579', 'benwgye@gmail.com', 'DUuMf579DPEv9', 'www.discord.com', '']]
-Account().select_account(resultList) 
+Account().find_account() 
