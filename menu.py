@@ -72,5 +72,3 @@ class Menu:
             sys.exit()
         time.sleep(2)
         self.main_menu()
-        
-Menu()

@@ -5,7 +5,7 @@ from pathlib import Path
 import shelve, pyinputplus as pyip
 from databaseManager import DatabaseManager as dm
 from typing import Dict
-
+import time, clear
 
 class Config:
 
@@ -61,7 +61,7 @@ class Config:
         self.set_user(sFile['user'])
         self.set_password(sFile['password'])
         self.set_email(sFile['email'])
-        sFile.close()    
+        sFile.close()
 
     def user_menu(self) -> None:
         """
@@ -83,6 +83,9 @@ class Config:
         # If the user wants to quit
         if option == menuArr[-1]:
             sys.exit()
+        print('Setup Complete')
+        time.sleep(1)
+        clear.clear()
         
     
     def existing_user(self) -> None:
@@ -96,11 +99,11 @@ class Config:
             user = pyip.inputStr("Username Does not exist. Please enter it again.\n").lower()
             user = re.compile(r'\s*').sub('',user)
         
-        password = password.confirm_password()
+        pswd = password.confirm_password()
         email = self.validate_email()
         
 
-        self.write_user_config(name, user, password)
+        self.write_user_config(name, user, pswd)
     
     def write_user_config(self, name: str, user:str, password:str, email="") -> None:
         """
