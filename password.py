@@ -1,7 +1,7 @@
 #! python3 
 # password.py - Creates a password
 import string
-import secrets
+import secrets, pyperclip
 import random, pyinputplus as pyip
 
 def generate_password(mode=1) -> str:
@@ -27,7 +27,7 @@ def generate_password(mode=1) -> str:
         password = ''.join(secrets.choice(alpha_numeric) for i in range(length))
     return password
 
-def confirm_password(self) -> str:
+def confirm_password() -> str:
     """
     User enters password and confirms that p1 == p2
     """
@@ -37,3 +37,21 @@ def confirm_password(self) -> str:
         if p1 == p2:
             return p1
         print("Password does not match please try again")
+
+def password_choice():
+    passOpt = ["Generate a password", "Enter your own password"]
+    passOption = pyip.inputMenu(passOpt, numbered=True)
+    # If the user wants to genereate a password
+    if passOption == passOpt[0]:
+        passOpt = ["Genereate a password containing at lease 1 Upper Case, 1 number and 1 symbol", "Genereate a alphanumeric password"]
+        passOption = pyip.inputMenu(passOpt, numbered=True)
+        # If the user choses for a password with symbols
+        if passOption == passOpt[0]:
+            psw = str(generate_password())
+        else: 
+            psw = str(generate_password(2))
+        pyperclip.copy(psw)
+    elif passOption == passOpt[1]:
+        psw = confirm_password()
+    print("Password %s copied to clipboard" % psw)
+    return psw
