@@ -50,7 +50,7 @@ class Menu:
             print('Generated password %s' % pswd, '. Copied to your clipboard')
         if option == menuArr[-1]:
             sys.exit()
-        time.sleep(2)
+        time.sleep(5)
         self.main_menu()
     
     
