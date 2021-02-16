@@ -2,3 +2,6 @@ sqlCred.txt
 planning/
 __*
 config/
+build/
+dist/
+menu.spec
