@@ -69,9 +69,12 @@ class Account:
         Find account information based on: App name
         """
         clear.clear()
-        appName = pyip.inputStr("Enter the app name for the account you would like to find:\n")
+        appName = pyip.inputStr("Enter the app name for the account you would like to find (Enter #all# to find all accounts):\n")
         clear.clear()
-        result = dbm.execute_query(query.find_account(appName),2)
+        if appName == '#all#':
+            result = dbm.execute_query(query.find_all(),2)
+        else:
+            result = dbm.execute_query(query.find_account(appName),2)
         while result == []:
             appName = pyip.inputStr("Could not find what you're looking for. Please try again or press q to quit\n")
             if appName == 'q':
@@ -109,7 +112,7 @@ class Account:
                 print(num+1, '\t', account)
             choice = pyip.inputInt("Select the account you want to choose:\t")
             while choice-1 > len(resultList):
-                choice = pyip.inputInt("Option unavailable. Please choose again:\t")
+                choice = pyip.inputInt("Option unavailable. Please choose again:\t", blank=True)
             clear.clear()
             print(resultList[choice-1])
             pyperclip.copy(resultList[choice-1][2])

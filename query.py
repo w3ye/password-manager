@@ -22,7 +22,14 @@ class GenereateQuery:
         """
         query = f"SELECT * FROM {self.tableName} WHERE app_name like '%{appName}%'"
         return query
-    
+
+    def find_all(self) -> str:
+        """
+        Finds all accounts in mysql
+        """
+        query = f"SELECT * FROM {self.tableName}"
+        return query
+        
     def delete_account(self, accountId: int) -> str:
         """
         Generate a query to delete an account by accountId(primary key)
