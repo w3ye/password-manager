@@ -19,3 +19,5 @@ This is a python script that manages password using mysql
 ```
 py main.py
 ```
+## Additional Info
+To run this you need to have a sql database set up and enter credentials into a sqlCred.txt file 
